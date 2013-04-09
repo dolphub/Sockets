@@ -1,0 +1,8 @@
+*/bin/
+*/obj/
+TCPLib/*.v11.suo
+*.cache
+*.suo
+*.v11.suo
+*.dll
+*.pdb
