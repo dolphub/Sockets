@@ -1,6 +1,11 @@
-#if !defined( __TCP_LIB )
+#if !defined( GUARD_MY_LIB )
+#define GUARD_MY_LIB
+
 #include <WinSock2.h>
 #include <iostream>
+#include <string>
+
+#pragma comment(lib, "Ws2_32.lib")
 
 class tcp
 {
@@ -12,13 +17,15 @@ private:
 public:
 	
 	//Initialize WSA
-	int WSASStartup( int i, int x, WSAData wsaData)
+	int WSASStartup( WORD version, LPWSADATA wsaData)
 	{
-		int iResult = WSAStartup( MAKEWORD(i,x), &wsaData );
+		int iResult = WSAStartup( version, wsaData );
 		if( iResult != 0 ){
 			std::cerr << "WSAStartup failed: " << iResult << std::endl;
 			return EXIT_FAILURE;
 		}
+
+		return 0;
 	}
 
 	//Create the Socket
@@ -46,16 +53,16 @@ public:
 	//I dont know what the value is
 	void bind_socket( int value, int bufferSize )
 	{
-		if( bind( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR ) {
-			std::cerr << "Failed to bind" << std::endl;
-			//exitCode = EXIT_FAILURE;
-		}
+		 if( bind( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR ) {
+			 std::cerr << "Failed to bind" << std::endl;
+			 //exitCode = EXIT_FAILURE;
+		 }
 
-		if( listen( _hSocket, value ) )
-		{
-			std::cerr << "Failed to listen" << std::endl;
-			//exitCode = EXIT_FAILURE;
-		}
+		 if( listen( _hSocket, value ) )
+		 {
+			 std::cerr << "Failed to listen" << std::endl;
+			 //exitCode = EXIT_FAILURE;
+		 }
 
 		std::cout << "Waiting for a connetion" << std::endl;
 		_hAccepted = SOCKET_ERROR;
@@ -68,35 +75,45 @@ public:
 		std::cout << "Client connected" << std::endl;
 	}
 
-	template <typename T>
-	void recieveMessage( T msg )
+	void connect_socket( )
 	{
-		unsigned const int MAX = 256;
-		char buf[MAX];
-
-		//Returns how many bytes it has gotten
-		int byteRecv = recv( _hAccepted, buf, //assigned buffer
-			MAX, //size of buffer
-			0 );
-
-		std::cout << "Recieved " << byteRecv << " bytes" << std::endl;
-		std::cout << "Msg: " << buf << std::endl;
-
-		//strcpy( buf, "Recieved" );
-		//int bytesSent = send( _hAccepted, buf, strlen( buf ) + 1, 0 );
-		//std::cout << "Sent: " << bytesSent << " bytes" << std::endl;
-
-		recv( _hAccepted, reinterpret_cast<T*>( &msg ), sizeof( msg ), 0 );
+		 if( connect( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR )	{
+			 std::cerr << "Failed to connect" << std::endl;
+		 }
+		 else
+			 std::cout << "Client connected" << std::endl;
 	}
 
 	template <typename T>
-	void sendMessage( T msg )
+	void clientMessage( T msg )
 	{
-		send( _hAccepted, reinterpret_cast<T*>( &msg ), sizeof( msg ), 0 );
+		send( _hSocket, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
+		std::cout << "Sent: " << msg << std::endl;
+
+		recv( _hSocket, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
+		std::cout << "Recieved: " << msg << std::endl;
+	}
+
+	//template <typename T>
+	void serverMessage( )
+	{
+		//Change it to 0 and it works but does not send the message back
+		//Seems like the memory allocated for the msg is being inproperly accessed by the WindSock2 functions.
+		std::string msg = "";
+		recv( _hAccepted, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
+		std::cout << "Recieved Sent: " << msg << std::endl;
+
+		//DoStuff();
+		std::string str = " server change";
+		//msg += str;
+
+		send( _hAccepted, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
+		std::cout << "Message Sent: " << msg << std::endl;
 	}
 
 	~tcp()
 	{
+		closesocket( _hAccepted );
 		closesocket( _hSocket );
 		WSACleanup();
 	}

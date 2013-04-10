@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCPLib", "TCPLib\TCPLib.vcxproj", "{DF511D48-8DD8-4B54-9BED-4BD526E2E6DA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCPServerTest", "TCPServerTest\TCPServerTest.vcxproj", "{2738B970-64E2-40D0-BC08-D51F3603509D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCPClientTest", "TCPClientTest\TCPClientTest.vcxproj", "{AF70B9AB-E14F-4491-AC30-CC247165AB7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +17,14 @@ Global
 		{DF511D48-8DD8-4B54-9BED-4BD526E2E6DA}.Debug|Win32.Build.0 = Debug|Win32
 		{DF511D48-8DD8-4B54-9BED-4BD526E2E6DA}.Release|Win32.ActiveCfg = Release|Win32
 		{DF511D48-8DD8-4B54-9BED-4BD526E2E6DA}.Release|Win32.Build.0 = Release|Win32
+		{2738B970-64E2-40D0-BC08-D51F3603509D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2738B970-64E2-40D0-BC08-D51F3603509D}.Debug|Win32.Build.0 = Debug|Win32
+		{2738B970-64E2-40D0-BC08-D51F3603509D}.Release|Win32.ActiveCfg = Release|Win32
+		{2738B970-64E2-40D0-BC08-D51F3603509D}.Release|Win32.Build.0 = Release|Win32
+		{AF70B9AB-E14F-4491-AC30-CC247165AB7F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AF70B9AB-E14F-4491-AC30-CC247165AB7F}.Debug|Win32.Build.0 = Debug|Win32
+		{AF70B9AB-E14F-4491-AC30-CC247165AB7F}.Release|Win32.ActiveCfg = Release|Win32
+		{AF70B9AB-E14F-4491-AC30-CC247165AB7F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
