@@ -101,20 +101,21 @@ public:
 		//Seems like the memory allocated for the msg is being inproperly accessed by the WindSock2 functions.
 		std::string msg = "";
 		recv( _hAccepted, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
-		std::cout << "Recieved Sent: " << msg << std::endl;
+		std::cout << "Recieved: " << msg << std::endl;
 
 		//DoStuff();
-		std::string str = " server change";
-		//msg += str;
+		std::string str = "Server";
 
-		send( _hAccepted, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
-		std::cout << "Message Sent: " << msg << std::endl;
+		send( _hAccepted, reinterpret_cast<char *>( &str ), sizeof( str ), 0 );
+		std::cout << "Sent: " << str << std::endl;
 	}
 
 	~tcp()
 	{
-		closesocket( _hAccepted );
-		closesocket( _hSocket );
+		if ( _hAccepted != INVALID_SOCKET)
+			closesocket( _hAccepted );
+		if ( _hSocket != INVALID_SOCKET)
+			closesocket( _hSocket );
 		WSACleanup();
 	}
 

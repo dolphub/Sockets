@@ -1,4 +1,4 @@
-﻿Build started 10/04/2013 11:51:28 AM.
+﻿Build started 10/04/2013 1:12:14 PM.
      1>Project "C:\Users\Acer\Documents\GitHub\Sockets\TCPLib\TCPLib\TCPLib.vcxproj" on node 2 (Build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\TCPLib.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -9,4 +9,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.16
+Time Elapsed 00:00:00.12

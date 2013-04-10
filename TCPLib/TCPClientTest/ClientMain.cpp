@@ -17,7 +17,7 @@ int main() {
 
 	_tcp.connect_socket();
 
-	string str = "Client: ";
+	string str = "Client";
 
 	_tcp.clientMessage(str);
 
