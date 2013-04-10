@@ -15,7 +15,7 @@ private:
 	SOCKET				_hSocket;
 	SOCKET				_hAccepted;
 public:
-	
+
 	//Initialize WSA
 	int WSASStartup( WORD version, LPWSADATA wsaData)
 	{
@@ -31,7 +31,7 @@ public:
 	//Create the Socket
 	void CreateSocket( int sockaddr, int type, int protoType )
 	{
-		
+
 		_hSocket = socket( sockaddr, type, protoType );
 		if( _hSocket == INVALID_SOCKET )
 		{
@@ -53,16 +53,16 @@ public:
 	//I dont know what the value is
 	void bind_socket( int value, int bufferSize )
 	{
-		 if( bind( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR ) {
-			 std::cerr << "Failed to bind" << std::endl;
-			 //exitCode = EXIT_FAILURE;
-		 }
+		if( bind( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR ) {
+			std::cerr << "Failed to bind" << std::endl;
+			//exitCode = EXIT_FAILURE;
+		}
 
-		 if( listen( _hSocket, value ) )
-		 {
-			 std::cerr << "Failed to listen" << std::endl;
-			 //exitCode = EXIT_FAILURE;
-		 }
+		if( listen( _hSocket, value ) )
+		{
+			std::cerr << "Failed to listen" << std::endl;
+			//exitCode = EXIT_FAILURE;
+		}
 
 		std::cout << "Waiting for a connetion" << std::endl;
 		_hAccepted = SOCKET_ERROR;
@@ -77,11 +77,11 @@ public:
 
 	void connect_socket( )
 	{
-		 if( connect( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR )	{
-			 std::cerr << "Failed to connect" << std::endl;
-		 }
-		 else
-			 std::cout << "Client connected" << std::endl;
+		if( connect( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR )	{
+			std::cerr << "Failed to connect" << std::endl;
+		}
+		else
+			std::cout << "Client connected" << std::endl;
 	}
 
 	template <typename T>
@@ -116,7 +116,7 @@ public:
 		//To recieve data
 		//unsigned const int MAX = 256;
 		//char buf[MAX];
-	
+
 		////Returns how many bytes it has gotten
 		//int byteRecv = recv( _hAccepted, buf, //assigned buffer
 		//	MAX, //size of buffer
@@ -147,10 +147,16 @@ public:
 	}
 
 	bool isPrimeNumber( int num ){
-		/*if( PrimeNumber )
-			return true*/
-		
-		return true;
+		bool prime = true;
+		for(int i = 3; i <= num; i++){
+			prime = true;
+			for(int n = 2; n <= i - 1; n++){
+				if(i % n == 0){
+					prime = false;
+				}
+			}
+		}
+		return prime;
 	}
 
 	~tcp()
