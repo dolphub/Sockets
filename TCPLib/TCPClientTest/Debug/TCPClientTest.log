@@ -1,4 +1,4 @@
-﻿Build started 10/04/2013 1:47:11 PM.
+﻿Build started 10/04/2013 3:18:43 PM.
      1>Project "C:\Users\Acer\Documents\GitHub\Sockets\TCPLib\TCPClientTest\TCPClientTest.vcxproj" on node 3 (Build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\TCPClientTest.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -15,4 +15,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.54
+Time Elapsed 00:00:03.26

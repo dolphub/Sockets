@@ -17,8 +17,6 @@ int main() {
 	//Need to remove the second parameter
 	_tcp.bind_socket( 1, 0 );
 
-	//string str = "Nothing";
-
 	_tcp.serverMessage();
 
 	cout << "Exit" << endl;

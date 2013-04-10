@@ -87,27 +87,70 @@ public:
 	template <typename T>
 	void clientMessage( T msg )
 	{
+		//unsigned const int MAX = 256;
+		//char buf[MAX];
+		//strcpy_s( buf, "Hello" );
+
+		//int bytesSent = send( _hSocket, buf, strlen( buf ) + 1, 0 );
+		//cout << "Sent: " << bytesSent << " bytes" << endl;
+
+		//	//Returns how many bytes it has gotten
+		//int byteRecv = recv( _hSocket, buf, //assigned buffer
+		//	MAX, //size of buffer
+		//	0 );
+
+		//cout << "Recieved " << byteRecv << " bytes" << endl;
+		//cout << "Msg: " << buf << endl;
+
 		send( _hSocket, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
 		std::cout << "Sent: " << msg << std::endl;
 
-		recv( _hSocket, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
-		std::cout << "Recieved: " << msg << std::endl;
+		bool isPrime = false;
+		recv( _hSocket, reinterpret_cast<char *>( &isPrime ), sizeof( isPrime ), 0 );
+		std::cout << "Recieved: " << isPrime << std::endl;
 	}
 
 	//template <typename T>
-	void serverMessage( )
+	void serverMessage()
 	{
+		//To recieve data
+		//unsigned const int MAX = 256;
+		//char buf[MAX];
+	
+		////Returns how many bytes it has gotten
+		//int byteRecv = recv( _hAccepted, buf, //assigned buffer
+		//	MAX, //size of buffer
+		//	0 );
+
+		//std::cout << "Recieved " << byteRecv << " bytes" << std::endl;
+		//std::cout << "Msg: " << buf << std::endl;
+
+
+
+		//std::string str = reinterpret_cast<char *>(buf );
+		//str += " + server";
+		//strcpy_s( buf, str.c_str() );
+		//int bytesSent = send( _hAccepted, buf, strlen( buf ) + 1, 0 );
+		//std::cout << "Sent: " << bytesSent << " bytes" << std::endl;
+
 		//Change it to 0 and it works but does not send the message back
 		//Seems like the memory allocated for the msg is being inproperly accessed by the WindSock2 functions.
-		std::string msg = "";
-		recv( _hAccepted, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
-		std::cout << "Recieved: " << msg << std::endl;
+		int i = 0;
+		recv( _hAccepted, reinterpret_cast<char *>( &i ), sizeof( i ), 0 );
+		std::cout << "Recieved: " << i << std::endl;
 
 		//DoStuff();
-		std::string str = "Server";
+		bool isPrime = isPrimeNumber(i);
 
-		send( _hAccepted, reinterpret_cast<char *>( &str ), sizeof( str ), 0 );
-		std::cout << "Sent: " << str << std::endl;
+		send( _hAccepted, reinterpret_cast<char *>( &isPrime ), sizeof( isPrime ), 0 );
+		std::cout << "Sent: " << isPrime << std::endl;
+	}
+
+	bool isPrimeNumber( int num ){
+		/*if( PrimeNumber )
+			return true*/
+		
+		return true;
 	}
 
 	~tcp()

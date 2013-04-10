@@ -1,5 +1,5 @@
-﻿Build started 10/04/2013 1:47:11 PM.
-     1>Project "C:\Users\Acer\Documents\GitHub\Sockets\TCPLib\TCPServerTest\TCPServerTest.vcxproj" on node 2 (Build target(s)).
+﻿Build started 10/04/2013 3:23:05 PM.
+     1>Project "C:\Users\Acer\Documents\GitHub\Sockets\TCPLib\TCPServerTest\TCPServerTest.vcxproj" on node 3 (Build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\TCPServerTest.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -15,4 +15,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.57
+Time Elapsed 00:00:03.69
