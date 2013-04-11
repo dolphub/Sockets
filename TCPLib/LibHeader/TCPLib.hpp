@@ -4,6 +4,7 @@
 #include <WinSock2.h>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -14,8 +15,9 @@ private:
 	sockaddr_in			_sockAddress;
 	SOCKET				_hSocket;
 	SOCKET				_hAccepted;
+	std::vector<SOCKET> _clientSockets;
 public:
-	
+
 	//Initialize WSA
 	int WSASStartup( WORD version, LPWSADATA wsaData)
 	{
@@ -31,7 +33,7 @@ public:
 	//Create the Socket
 	void CreateSocket( int sockaddr, int type, int protoType )
 	{
-		
+
 		_hSocket = socket( sockaddr, type, protoType );
 		if( _hSocket == INVALID_SOCKET )
 		{
@@ -53,35 +55,41 @@ public:
 	//I dont know what the value is
 	void bind_socket( int value, int bufferSize )
 	{
-		 if( bind( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR ) {
-			 std::cerr << "Failed to bind" << std::endl;
-			 //exitCode = EXIT_FAILURE;
-		 }
+		if( bind( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR ) {
+			std::cerr << "Failed to bind" << std::endl;
+			//exitCode = EXIT_FAILURE;
+		}
 
-		 if( listen( _hSocket, value ) )
-		 {
-			 std::cerr << "Failed to listen" << std::endl;
-			 //exitCode = EXIT_FAILURE;
-		 }
+		if( listen( _hSocket, value ) )
+		{
+			std::cerr << "Failed to listen" << std::endl;
+			//exitCode = EXIT_FAILURE;
+		}
 
 		std::cout << "Waiting for a connetion" << std::endl;
-		_hAccepted = SOCKET_ERROR;
 
 		//Connect all of the clients to individual sockets
 		//Then push all of the sockets to individual threads for later processing
-		while( _hAccepted == SOCKET_ERROR )
-			_hAccepted = accept( _hSocket, NULL, NULL );
+		_hAccepted = SOCKET_ERROR;
 
-		std::cout << "Client connected" << std::endl;
+		while( _clientSockets.size() != 2 )
+		{
+			_hAccepted = accept( _hSocket, NULL, NULL );
+			if ( _hAccepted != SOCKET_ERROR )
+			{
+				_clientSockets.push_back( _hAccepted );
+				std::cout << "Client connected" << std::endl;
+			}
+		}
 	}
 
-	void connect_socket( )
+	void connect_socket()
 	{
-		 if( connect( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR )	{
-			 std::cerr << "Failed to connect" << std::endl;
-		 }
-		 else
-			 std::cout << "Client connected" << std::endl;
+		if( connect( _hSocket, (SOCKADDR*)&_sockAddress, sizeof( _sockAddress ) ) == SOCKET_ERROR )	{
+			std::cerr << "Failed to connect" << std::endl;
+		}
+		else
+			std::cout << "Client connected" << std::endl;
 	}
 
 	template <typename T>
@@ -102,12 +110,16 @@ public:
 		//cout << "Recieved " << byteRecv << " bytes" << endl;
 		//cout << "Msg: " << buf << endl;
 
+
 		send( _hSocket, reinterpret_cast<char *>( &msg ), sizeof( msg ), 0 );
 		std::cout << "Sent: " << msg << std::endl;
 
 		bool isPrime = false;
 		recv( _hSocket, reinterpret_cast<char *>( &isPrime ), sizeof( isPrime ), 0 );
-		std::cout << "Recieved: " << isPrime << std::endl;
+		if( isPrime )
+			std::cout << msg << " is a Prime Number!" << std::endl;
+		else
+			std::cout << msg << " is a not a Prime Number!" << std::endl;
 	}
 
 	//template <typename T>
@@ -116,7 +128,7 @@ public:
 		//To recieve data
 		//unsigned const int MAX = 256;
 		//char buf[MAX];
-	
+
 		////Returns how many bytes it has gotten
 		//int byteRecv = recv( _hAccepted, buf, //assigned buffer
 		//	MAX, //size of buffer
@@ -124,8 +136,6 @@ public:
 
 		//std::cout << "Recieved " << byteRecv << " bytes" << std::endl;
 		//std::cout << "Msg: " << buf << std::endl;
-
-
 
 		//std::string str = reinterpret_cast<char *>(buf );
 		//str += " + server";
@@ -135,30 +145,57 @@ public:
 
 		//Change it to 0 and it works but does not send the message back
 		//Seems like the memory allocated for the msg is being inproperly accessed by the WindSock2 functions.
-		int i = 0;
-		recv( _hAccepted, reinterpret_cast<char *>( &i ), sizeof( i ), 0 );
-		std::cout << "Recieved: " << i << std::endl;
 
-		//DoStuff();
-		bool isPrime = isPrimeNumber(i);
+		int iResult = 0;
+		do {
 
-		send( _hAccepted, reinterpret_cast<char *>( &isPrime ), sizeof( isPrime ), 0 );
-		std::cout << "Sent: " << isPrime << std::endl;
+			int n = 0;
+			for ( unsigned i = 0; i < _clientSockets.size(); ++i )
+			{
+				iResult = recv( _clientSockets[i], reinterpret_cast<char *>( &n ), sizeof( n ), 0 );
+				std::cout << "Recieved: " << n << std::endl;
+
+				bool isPrime = isPrimeNumber(n);
+
+				send( _clientSockets[i], reinterpret_cast<char *>( &isPrime ), sizeof( isPrime ), 0 );
+				if( isPrime )
+					std::cout << "Sent: " << n << " is a Prime Number!" << std::endl;
+				else
+					std::cout << "Sent: " << n << " is a not a Prime Number!" << std::endl;
+			}
+
+
+		}
+		while( iResult > 0 );
+
+
 	}
 
 	bool isPrimeNumber( int num ){
-		/*if( PrimeNumber )
-			return true*/
-		
-		return true;
+		bool prime = true;
+		for(int i = 3; i <= num; i++){
+			prime = true;
+			for(int n = 2; n <= i - 1; n++){
+				if(i % n == 0){
+					prime = false;
+				}
+			}
+		}
+		return prime;
 	}
 
 	~tcp()
 	{
-		if ( _hAccepted != INVALID_SOCKET)
-			closesocket( _hAccepted );
+		if ( _clientSockets.size() != 0 )
+		{
+			for( unsigned i = 0; i < _clientSockets.size(); ++i )
+				closesocket( _clientSockets[i] );
+		}
+		/*if ( _hAccepted != INVALID_SOCKET)
+		closesocket( _hAccepted );*/
 		if ( _hSocket != INVALID_SOCKET)
 			closesocket( _hSocket );
+
 		WSACleanup();
 	}
 
